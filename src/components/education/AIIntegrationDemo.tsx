@@ -11,7 +11,12 @@ import {
   CheckCircle,
   Code,
   Shield,
-  Zap
+  Zap,
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  Pause,
+  RotateCcw
 } from 'lucide-react';
 
 /*
@@ -25,9 +30,10 @@ import {
 
 interface AIIntegrationDemoProps {
   isAnimating?: boolean;
+  onToggleAnimation?: () => void;
 }
 
-export const AIIntegrationDemo = ({ isAnimating = false }: AIIntegrationDemoProps) => {
+export const AIIntegrationDemo = ({ isAnimating = false, onToggleAnimation }: AIIntegrationDemoProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [userMessage, setUserMessage] = useState('');
   const [aiResponse, setAiResponse] = useState('');
@@ -35,67 +41,78 @@ export const AIIntegrationDemo = ({ isAnimating = false }: AIIntegrationDemoProp
 
   const demoMessage = "Ciao! Come funziona l'AI?";
   const demoResponse = "L'AI analizza il tuo messaggio e genera una risposta basata sul contesto...";
+  const totalSteps = 5;
 
-  // Animazione automatica del flusso
+  // Aggiorna contenuti quando cambia step (manuale o automatico)
   useEffect(() => {
-    if (!isAnimating) {
-      setCurrentStep(0);
+    if (currentStep === 0) {
       setUserMessage('');
       setAiResponse('');
-      return;
+    } else if (currentStep === 1) {
+      // Typing del messaggio utente
+      let i = 0;
+      setUserMessage('');
+      const typing = setInterval(() => {
+        setUserMessage(demoMessage.slice(0, i + 1));
+        i++;
+        if (i >= demoMessage.length) clearInterval(typing);
+      }, 50);
+      return () => clearInterval(typing);
+    } else if (currentStep === 5) {
+      // Typing della risposta AI
+      let i = 0;
+      setAiResponse('');
+      const typing = setInterval(() => {
+        setAiResponse(demoResponse.slice(0, i + 1));
+        i++;
+        if (i >= demoResponse.length) clearInterval(typing);
+      }, 30);
+      return () => clearInterval(typing);
+    }
+  }, [currentStep]);
+
+  // Animazione automatica del flusso (3 secondi per step)
+  useEffect(() => {
+    if (!isAnimating) return;
+
+    const interval = setInterval(() => {
+      setCurrentStep(prev => {
+        if (prev >= totalSteps) {
+          // Reset e ricomincia
+          return 1;
+        }
+        return prev + 1;
+      });
+    }, 3000); // 3 secondi per step
+
+    // Avvia dal primo step se siamo a 0
+    if (currentStep === 0) {
+      setCurrentStep(1);
     }
 
-    const steps = [
-      // Step 1: Utente scrive
-      () => {
-        setCurrentStep(1);
-        setUserMessage('');
-        setAiResponse('');
-      },
-      // Step 1b: Messaggio digitato
-      () => {
-        let i = 0;
-        const typing = setInterval(() => {
-          setUserMessage(demoMessage.slice(0, i + 1));
-          i++;
-          if (i >= demoMessage.length) clearInterval(typing);
-        }, 50);
-      },
-      // Step 2: Invio al backend
-      () => setCurrentStep(2),
-      // Step 3: Backend legge secrets
-      () => setCurrentStep(3),
-      // Step 4: Chiamata AI Gateway
-      () => setCurrentStep(4),
-      // Step 5: Risposta AI
-      () => {
-        setCurrentStep(5);
-        let i = 0;
-        const typing = setInterval(() => {
-          setAiResponse(demoResponse.slice(0, i + 1));
-          i++;
-          if (i >= demoResponse.length) clearInterval(typing);
-        }, 30);
-      },
-      // Reset
-      () => {
-        setCurrentStep(0);
-        setUserMessage('');
-        setAiResponse('');
-      },
-    ];
-
-    let stepIndex = 0;
-    const interval = setInterval(() => {
-      steps[stepIndex]();
-      stepIndex = (stepIndex + 1) % steps.length;
-    }, 2000);
-
-    // Avvia subito il primo step
-    steps[0]();
-
     return () => clearInterval(interval);
-  }, [isAnimating]);
+  }, [isAnimating, currentStep]);
+
+  // Navigazione manuale
+  const goToStep = (step: number) => {
+    if (step >= 0 && step <= totalSteps) {
+      setCurrentStep(step);
+    }
+  };
+
+  const handlePrevStep = () => {
+    goToStep(Math.max(0, currentStep - 1));
+  };
+
+  const handleNextStep = () => {
+    goToStep(Math.min(totalSteps, currentStep + 1));
+  };
+
+  const handleReset = () => {
+    setCurrentStep(0);
+    setUserMessage('');
+    setAiResponse('');
+  };
 
   const flowSteps = [
     {
@@ -142,6 +159,78 @@ export const AIIntegrationDemo = ({ isAnimating = false }: AIIntegrationDemoProp
 
   return (
     <div className="space-y-8">
+      {/* Controller con step manuali */}
+      <div className="flex flex-col items-center gap-4">
+        {/* Progress bar */}
+        <div className="flex items-center gap-2 w-full max-w-md">
+          {flowSteps.map((step, index) => (
+            <button
+              key={step.id}
+              onClick={() => goToStep(step.id)}
+              className={`
+                flex-1 h-2 rounded-full transition-all duration-300 cursor-pointer
+                ${currentStep >= step.id 
+                  ? 'bg-primary' 
+                  : 'bg-muted hover:bg-muted-foreground/30'
+                }
+              `}
+              title={step.title}
+            />
+          ))}
+        </div>
+
+        {/* Controlli */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handlePrevStep}
+            disabled={currentStep <= 0}
+            className="w-10 h-10 rounded-lg border border-border bg-card flex items-center justify-center hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            title="Step precedente"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={onToggleAnimation}
+            className={`
+              w-12 h-12 rounded-xl flex items-center justify-center font-medium transition-all
+              ${isAnimating 
+                ? 'bg-destructive text-destructive-foreground' 
+                : 'bg-primary text-primary-foreground'
+              }
+            `}
+            title={isAnimating ? 'Pausa' : 'Play automatico'}
+          >
+            {isAnimating ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+          </button>
+
+          <button
+            onClick={handleNextStep}
+            disabled={currentStep >= totalSteps}
+            className="w-10 h-10 rounded-lg border border-border bg-card flex items-center justify-center hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            title="Step successivo"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={handleReset}
+            className="w-10 h-10 rounded-lg border border-border bg-card flex items-center justify-center hover:bg-muted transition-all"
+            title="Reset"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Indicatore step */}
+        <p className="text-sm text-muted-foreground">
+          Passo <span className="font-bold text-foreground">{currentStep}</span> di {totalSteps}
+          {currentStep > 0 && currentStep <= totalSteps && (
+            <span className="ml-2 text-primary">• {flowSteps[currentStep - 1]?.title}</span>
+          )}
+        </p>
+      </div>
+
       {/* Header */}
       <div className="text-center space-y-4">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 border border-primary/30">
