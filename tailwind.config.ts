@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -43,6 +43,10 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
@@ -51,13 +55,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        /* Colori custom per chat bubbles */
-        ai: {
-          bubble: "hsl(var(--ai-bubble))",
-          border: "hsl(var(--ai-border))",
-        },
-        user: {
-          bubble: "hsl(var(--user-bubble))",
+        /* Colori architettura */
+        arch: {
+          frontend: "hsl(var(--frontend))",
+          edge: "hsl(var(--edge-function))",
+          database: "hsl(var(--database))",
+          gateway: "hsl(var(--api-gateway))",
+          secrets: "hsl(var(--secrets))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -88,10 +92,6 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-      },
-      boxShadow: {
-        "soft": "0 2px 8px -2px rgba(0, 0, 0, 0.08)",
-        "soft-lg": "0 8px 24px -8px rgba(0, 0, 0, 0.12)",
       },
     },
   },
