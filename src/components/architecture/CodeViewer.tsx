@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
+import { Info, ChevronRight, ChevronLeft } from 'lucide-react';
 
 /*
   ====================================
-  COMPONENTE: CodeViewer
+  COMPONENTE: CodeViewer (Migliorato)
   ====================================
   
-  Mostra il codice con syntax highlighting
-  e animazioni che evidenziano le parti rilevanti.
+  Versione migliorata con spiegazioni inline
+  per ogni riga di codice importante.
 */
 
 interface CodeViewerProps {
@@ -14,170 +15,218 @@ interface CodeViewerProps {
   isAnimating: boolean;
 }
 
+interface CodeLine {
+  code: string;
+  explanation?: string;
+  isHighlight?: boolean;
+}
+
 interface CodeBlock {
   title: string;
+  context: string; // Spiegazione del contesto
   language: string;
-  code: string;
-  highlights: number[]; // Linee da evidenziare
-  explanation: string;
+  lines: CodeLine[];
+  keyTakeaway: string;
 }
 
 const codeBlocks: CodeBlock[] = [
   {
-    title: '1. Frontend - Invio Richiesta',
+    title: '1️⃣ Frontend - Invio della Richiesta',
+    context: 'Questo codice gira nel BROWSER dell\'utente. È il punto di partenza: l\'utente ha scritto un messaggio e vuole inviarlo all\'AI.',
     language: 'typescript',
-    code: `// Il frontend chiama l'Edge Function
-const response = await fetch(
-  \`\${SUPABASE_URL}/functions/v1/chat\`,
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      // Token pubblico per autenticazione
-      'Authorization': \`Bearer \${ANON_KEY}\`
-    },
-    body: JSON.stringify({ 
-      messages: conversationHistory 
-    })
-  }
-);`,
-    highlights: [2, 3, 7, 8, 11],
-    explanation: 'Il frontend NON contiene mai la API key privata. Usa solo il token pubblico (anon key) per autenticarsi con Supabase.',
+    lines: [
+      { code: '// Questo codice è nel TUO browser', explanation: 'Il frontend gira sul computer dell\'utente, non su un server.' },
+      { code: '' },
+      { code: 'const response = await fetch(', explanation: 'fetch() è una funzione che invia richieste HTTP a un server.' },
+      { code: '  `${SUPABASE_URL}/functions/v1/chat`,', isHighlight: true, explanation: '📍 Questo è l\'indirizzo del nostro backend (Edge Function).' },
+      { code: '  {' },
+      { code: '    method: \'POST\',', explanation: 'POST significa "sto inviando dati" (diverso da GET che "chiede dati").' },
+      { code: '    headers: {' },
+      { code: '      \'Content-Type\': \'application/json\',', explanation: 'Dice al server che stiamo inviando dati in formato JSON.' },
+      { code: '      \'Authorization\': `Bearer ${ANON_KEY}`', isHighlight: true, explanation: '🔑 Questo è un token PUBBLICO, non la API key segreta!' },
+      { code: '    },' },
+      { code: '    body: JSON.stringify({' },
+      { code: '      messages: conversationHistory', isHighlight: true, explanation: '💬 Qui ci sono i messaggi della chat da inviare all\'AI.' },
+      { code: '    })' },
+      { code: '  }' },
+      { code: ');' },
+    ],
+    keyTakeaway: '🎯 Il frontend usa solo chiavi PUBBLICHE. La API key segreta non è MAI qui!',
   },
   {
-    title: '2. Edge Function - Elaborazione',
+    title: '2️⃣ Edge Function - Il Cuore Sicuro',
+    context: 'Questo codice gira su un SERVER remoto. L\'utente non può vederlo. È qui che possiamo usare dati segreti in sicurezza.',
     language: 'typescript',
-    code: `// supabase/functions/chat/index.ts
-serve(async (req) => {
-  const { messages } = await req.json();
-  
-  // ⚠️ La API key è nei SECRETS, non nel codice!
-  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-  
-  if (!LOVABLE_API_KEY) {
-    throw new Error("API Key non configurata");
-  }
-  
-  // Ora possiamo chiamare l'AI Gateway
-  // con la chiave sicura
-});`,
-    highlights: [5, 6],
-    explanation: 'L\'Edge Function gira sul SERVER. Qui è sicuro accedere ai secrets perché il codice non è visibile al client.',
+    lines: [
+      { code: '// Questo codice gira su un SERVER, non nel browser' },
+      { code: '' },
+      { code: 'serve(async (req) => {' },
+      { code: '  // 1. Leggo i dati dalla richiesta del frontend' },
+      { code: '  const { messages } = await req.json();' },
+      { code: '' },
+      { code: '  // 2. ⭐ MOMENTO CHIAVE: recupero la API key', explanation: 'Questo è il passaggio più importante!' },
+      { code: '  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");', isHighlight: true, explanation: '🔐 La chiave viene letta dai SECRETS, non dal codice!' },
+      { code: '' },
+      { code: '  // 3. Verifico che la chiave esista' },
+      { code: '  if (!LOVABLE_API_KEY) {' },
+      { code: '    throw new Error("API Key non configurata!");', explanation: 'Se qualcuno dimentica di configurare il secret, l\'app si ferma.' },
+      { code: '  }' },
+      { code: '' },
+      { code: '  // 4. Ora posso chiamare l\'AI in sicurezza...' },
+      { code: '});' },
+    ],
+    keyTakeaway: '🎯 Deno.env.get() legge variabili d\'ambiente salvate in modo sicuro. La chiave non è mai nel codice!',
   },
   {
-    title: '3. Secrets - Configurazione Sicura',
+    title: '3️⃣ Secrets - La Cassaforte Digitale',
+    context: 'I secrets sono configurati tramite dashboard o CLI, MAI scritti nel codice sorgente. Sono criptati e accessibili solo dal backend.',
     language: 'bash',
-    code: `# I secrets sono variabili d'ambiente
-# salvate in modo sicuro su Supabase
-
-# NON fare mai questo:
-❌ const API_KEY = "sk-abc123..."  // Nel codice
-
-# Fai sempre questo:
-✅ Deno.env.get("LOVABLE_API_KEY")  // Dal secret
-
-# Il secret viene configurato via dashboard
-# o CLI di Supabase, MAI nel codice sorgente`,
-    highlights: [4, 5, 7, 8],
-    explanation: 'I secrets sono criptati e accessibili solo dal backend. Non vengono mai esposti nel bundle del frontend.',
+    lines: [
+      { code: '# ❌ SBAGLIATO - Mai fare così:', explanation: 'Questo errore espone la chiave a tutto il mondo!' },
+      { code: '' },
+      { code: 'const API_KEY = "sk-abc123xyz789..."', isHighlight: true, explanation: '⚠️ Chiunque legga il codice può rubare questa chiave!' },
+      { code: '' },
+      { code: '# ✅ CORRETTO - La chiave è in un secret:', explanation: 'Il secret è salvato in modo sicuro nel server.' },
+      { code: '' },
+      { code: 'const API_KEY = Deno.env.get("LOVABLE_API_KEY")', isHighlight: true, explanation: '✅ Il codice non contiene il valore, solo il nome della variabile.' },
+      { code: '' },
+      { code: '# Come si configura un secret?' },
+      { code: '# 1. Vai nella dashboard di Supabase o Lovable' },
+      { code: '# 2. Aggiungi una nuova variabile d\'ambiente' },
+      { code: '# 3. Dai un nome (es. LOVABLE_API_KEY)' },
+      { code: '# 4. Inserisci il valore segreto' },
+      { code: '# 5. Salva - ora è disponibile nel backend!' },
+    ],
+    keyTakeaway: '🎯 I secrets vengono configurati UNA volta nella dashboard, poi usati nel codice tramite nome.',
   },
   {
-    title: '4. AI Gateway - Chiamata Sicura',
+    title: '4️⃣ AI Gateway - La Chiamata Finale',
+    context: 'Ora che abbiamo la API key (in modo sicuro), possiamo finalmente chiamare il servizio AI. Questa chiamata parte dal SERVER, non dal browser.',
     language: 'typescript',
-    code: `// Chiamata all'AI Gateway con la API key
-const aiResponse = await fetch(
-  "https://ai.gateway.lovable.dev/v1/chat/completions",
-  {
-    method: "POST",
-    headers: {
-      // La API key è passata qui, in modo sicuro
-      "Authorization": \`Bearer \${LOVABLE_API_KEY}\`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
-      messages: messages,
-      stream: true,
-    }),
-  }
-);`,
-    highlights: [7, 8],
-    explanation: 'Solo l\'Edge Function può fare questa chiamata perché solo lei ha accesso alla API key nei secrets.',
+    lines: [
+      { code: '// Chiamata all\'AI Gateway (dal server, con chiave sicura)' },
+      { code: '' },
+      { code: 'const aiResponse = await fetch(' },
+      { code: '  "https://ai.gateway.lovable.dev/v1/chat/completions",', explanation: 'Questo è l\'endpoint del servizio AI.' },
+      { code: '  {' },
+      { code: '    method: "POST",' },
+      { code: '    headers: {' },
+      { code: '      // ⭐ Ecco la API key segreta!', isHighlight: true },
+      { code: '      "Authorization": `Bearer ${LOVABLE_API_KEY}`,', isHighlight: true, explanation: '🔐 La chiave viaggia in modo sicuro dal server all\'AI.' },
+      { code: '      "Content-Type": "application/json",' },
+      { code: '    },' },
+      { code: '    body: JSON.stringify({' },
+      { code: '      model: "google/gemini-2.5-flash",', explanation: 'Specifichiamo quale modello AI usare.' },
+      { code: '      messages: messages,', explanation: 'I messaggi della conversazione.' },
+      { code: '      stream: true,', explanation: 'Stream=true fa apparire il testo parola per parola.' },
+      { code: '    }),' },
+      { code: '  }' },
+      { code: ');' },
+    ],
+    keyTakeaway: '🎯 Solo il backend può fare questa chiamata perché solo lui ha accesso alla API key!',
   },
 ];
 
 export const CodeViewer = ({ step, isAnimating }: CodeViewerProps) => {
   const [visibleLines, setVisibleLines] = useState<number>(0);
+  const [showExplanation, setShowExplanation] = useState<number | null>(null);
   const currentBlock = codeBlocks[step] || codeBlocks[0];
-  const lines = currentBlock.code.split('\n');
 
-  // Animazione typing del codice
   useEffect(() => {
+    setShowExplanation(null);
+    
     if (!isAnimating) {
-      setVisibleLines(lines.length);
+      setVisibleLines(currentBlock.lines.length);
       return;
     }
 
     setVisibleLines(0);
     const interval = setInterval(() => {
       setVisibleLines(prev => {
-        if (prev >= lines.length) {
+        if (prev >= currentBlock.lines.length) {
           clearInterval(interval);
           return prev;
         }
         return prev + 1;
       });
-    }, 100);
+    }, 150);
 
     return () => clearInterval(interval);
-  }, [step, isAnimating, lines.length]);
+  }, [step, isAnimating, currentBlock.lines.length]);
 
-  // Syntax highlighting semplice
   const highlightSyntax = (line: string) => {
     return line
-      .replace(/(\/\/.*)/g, '<span class="text-muted-foreground">$1</span>')
-      .replace(/(#.*)/g, '<span class="text-muted-foreground">$1</span>')
+      .replace(/(\/\/.*)/g, '<span class="text-muted-foreground italic">$1</span>')
+      .replace(/(#.*)/g, '<span class="text-muted-foreground italic">$1</span>')
       .replace(/(".*?")/g, '<span class="text-accent">$1</span>')
-      .replace(/(`.*?`)/g, '<span class="text-accent">$1</span>')
-      .replace(/(const|let|var|async|await|function|return|if|throw|new)/g, '<span class="text-secondary">$1</span>')
-      .replace(/(fetch|Error|JSON|Deno|env|get)/g, '<span class="text-warning">$1</span>')
+      .replace(/(`[^`]*`)/g, '<span class="text-accent">$1</span>')
+      .replace(/('.*?')/g, '<span class="text-accent">$1</span>')
+      .replace(/\b(const|let|var|async|await|function|return|if|throw|new|true|false)\b/g, '<span class="text-secondary">$1</span>')
+      .replace(/\b(fetch|Error|JSON|Deno|env|get|serve|stringify)\b/g, '<span class="text-warning">$1</span>')
       .replace(/(❌|⚠️)/g, '<span class="text-destructive">$1</span>')
-      .replace(/(✅)/g, '<span class="text-accent">$1</span>');
+      .replace(/(✅|⭐)/g, '<span class="text-accent">$1</span>');
   };
 
   return (
     <div className="rounded-xl border border-border bg-card overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
-        <span className="font-semibold text-sm">{currentBlock.title}</span>
-        <span className="text-xs text-muted-foreground font-mono">
-          {currentBlock.language}
-        </span>
+      {/* Header con contesto */}
+      <div className="border-b border-border bg-muted/30">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            <span className="font-semibold">{currentBlock.title}</span>
+            <span className="text-xs text-muted-foreground font-mono px-2 py-1 rounded bg-muted">
+              {currentBlock.language}
+            </span>
+          </div>
+        </div>
+        {/* Contesto per principianti */}
+        <div className="px-4 pb-3">
+          <div className="flex items-start gap-2 p-3 rounded-lg bg-primary/10 border border-primary/20">
+            <Info className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+            <p className="text-sm text-muted-foreground">{currentBlock.context}</p>
+          </div>
+        </div>
       </div>
 
-      {/* Codice */}
+      {/* Codice con spiegazioni */}
       <div className="p-4 font-mono text-sm overflow-x-auto">
         <pre className="leading-relaxed">
-          {lines.slice(0, visibleLines).map((line, index) => {
-            const isHighlighted = currentBlock.highlights.includes(index + 1);
-            return (
+          {currentBlock.lines.slice(0, visibleLines).map((line, index) => (
+            <div key={index} className="group">
               <div
-                key={index}
                 className={`
-                  flex transition-all duration-300
-                  ${isHighlighted ? 'bg-primary/10 -mx-4 px-4 border-l-2 border-primary' : ''}
+                  flex transition-all duration-300 rounded
+                  ${line.isHighlight ? 'bg-primary/10 -mx-2 px-2 border-l-2 border-primary' : ''}
+                  ${line.explanation ? 'cursor-pointer hover:bg-muted/50' : ''}
                 `}
+                onClick={() => line.explanation && setShowExplanation(showExplanation === index ? null : index)}
               >
-                <span className="w-8 text-muted-foreground/50 select-none">
+                <span className="w-8 text-muted-foreground/50 select-none shrink-0">
                   {index + 1}
                 </span>
                 <span 
-                  dangerouslySetInnerHTML={{ __html: highlightSyntax(line) || '&nbsp;' }}
+                  className="flex-1"
+                  dangerouslySetInnerHTML={{ __html: highlightSyntax(line.code) || '&nbsp;' }}
                 />
+                {line.explanation && (
+                  <span className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Info className="w-4 h-4 text-primary" />
+                  </span>
+                )}
               </div>
-            );
-          })}
-          {visibleLines < lines.length && (
+              
+              {/* Spiegazione inline */}
+              {showExplanation === index && line.explanation && (
+                <div className="ml-8 my-2 p-3 rounded-lg bg-warning/10 border border-warning/30 text-sm fade-in">
+                  <p className="text-muted-foreground">
+                    💡 {line.explanation}
+                  </p>
+                </div>
+              )}
+            </div>
+          ))}
+          
+          {visibleLines < currentBlock.lines.length && (
             <div className="flex items-center gap-1 text-muted-foreground">
               <span className="w-8" />
               <span className="inline-block w-2 h-4 bg-primary animate-pulse" />
@@ -186,10 +235,17 @@ export const CodeViewer = ({ step, isAnimating }: CodeViewerProps) => {
         </pre>
       </div>
 
-      {/* Spiegazione */}
-      <div className="px-4 py-3 border-t border-border bg-muted/20">
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          💡 {currentBlock.explanation}
+      {/* Key Takeaway */}
+      <div className="px-4 py-3 border-t border-border bg-accent/5">
+        <p className="text-sm font-medium text-accent">
+          {currentBlock.keyTakeaway}
+        </p>
+      </div>
+
+      {/* Suggerimento */}
+      <div className="px-4 py-2 border-t border-border bg-muted/20">
+        <p className="text-xs text-muted-foreground text-center">
+          👆 Clicca sulle righe evidenziate per vedere la spiegazione
         </p>
       </div>
     </div>

@@ -1,30 +1,28 @@
 import { useState, useEffect } from 'react';
-import { GraduationCap, BookOpen, Code2, Zap } from 'lucide-react';
+import { GraduationCap, BookOpen, Code2, Zap, HelpCircle } from 'lucide-react';
 import { ArchitectureDiagram } from '@/components/architecture/ArchitectureDiagram';
 import { CodeViewer } from '@/components/architecture/CodeViewer';
 import { SecurityFlow } from '@/components/architecture/SecurityFlow';
 import { FlowController } from '@/components/architecture/FlowController';
 import { DataFlowVisualization } from '@/components/architecture/DataFlowVisualization';
+import { BeginnerIntro } from '@/components/education/BeginnerIntro';
+import { Glossary } from '@/components/education/Glossary';
 
 /*
   ====================================
   PAGINA: AI Text Companion - Educativo
   ====================================
   
-  Questa app è progettata per INSEGNARE come funziona
-  l'integrazione di un'API AI in un'applicazione full-stack.
-  
-  NON è una chat funzionante, ma una visualizzazione
-  interattiva dell'architettura.
+  App educativa per principianti assoluti
+  che vogliono capire l'integrazione AI full-stack.
 */
 
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeSection, setActiveSection] = useState<'architecture' | 'security' | 'flow'>('architecture');
+  const [activeSection, setActiveSection] = useState<'intro' | 'architecture' | 'security' | 'flow'>('intro');
   const totalSteps = 4;
 
-  // Auto-play
   useEffect(() => {
     if (!isPlaying) return;
 
@@ -36,7 +34,7 @@ const Index = () => {
         }
         return prev + 1;
       });
-    }, 2500);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isPlaying]);
@@ -50,30 +48,31 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h1 className="font-bold text-lg">AI Text Companion</h1>
-                <p className="text-xs text-muted-foreground">Impara l'integrazione AI Full-Stack</p>
+                <p className="text-xs text-muted-foreground">Guida Interattiva all'Integrazione AI</p>
               </div>
             </div>
 
-            {/* Navigation tabs */}
-            <nav className="flex items-center gap-1 bg-muted/50 rounded-lg p-1">
+            {/* Navigation */}
+            <nav className="flex items-center gap-1 bg-muted/50 rounded-lg p-1 overflow-x-auto">
               {[
+                { id: 'intro', label: 'Introduzione', icon: HelpCircle },
                 { id: 'architecture', label: 'Architettura', icon: Code2 },
                 { id: 'security', label: 'Sicurezza', icon: BookOpen },
-                { id: 'flow', label: 'Flusso Dati', icon: Zap },
+                { id: 'flow', label: 'Flusso', icon: Zap },
               ].map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
                   onClick={() => setActiveSection(id as any)}
                   className={`
-                    flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all
+                    flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all whitespace-nowrap
                     ${activeSection === id 
                       ? 'bg-background text-foreground shadow-sm' 
                       : 'text-muted-foreground hover:text-foreground'
@@ -89,92 +88,165 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="container mx-auto px-4 py-8">
-        {/* Intro */}
-        <div className="text-center mb-8 fade-in">
-          <h2 className="text-3xl font-bold mb-3">
-            Come Funziona un'Integrazione AI
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Scopri passo dopo passo come un'applicazione web comunica in modo sicuro 
-            con un servizio AI, proteggendo le API key sensibili.
-          </p>
-        </div>
+      {/* Main */}
+      <main className="container mx-auto px-4 py-6">
+        {/* Glossario sempre visibile */}
+        {activeSection !== 'intro' && (
+          <div className="mb-6 fade-in">
+            <Glossary />
+          </div>
+        )}
 
-        {/* Controller */}
-        <div className="mb-8 fade-in stagger-1">
-          <FlowController
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-            isPlaying={isPlaying}
-            onStepChange={setCurrentStep}
-            onPlayPause={() => setIsPlaying(!isPlaying)}
-            onReset={handleReset}
-          />
-        </div>
+        {/* Controller (non in intro) */}
+        {activeSection !== 'intro' && (
+          <div className="mb-8 fade-in">
+            <FlowController
+              currentStep={currentStep}
+              totalSteps={totalSteps}
+              isPlaying={isPlaying}
+              onStepChange={setCurrentStep}
+              onPlayPause={() => setIsPlaying(!isPlaying)}
+              onReset={handleReset}
+            />
+          </div>
+        )}
 
-        {/* Content based on active section */}
+        {/* Content */}
         <div className="space-y-8">
+          {/* INTRO */}
+          {activeSection === 'intro' && (
+            <section className="fade-in">
+              <BeginnerIntro />
+              
+              {/* CTA per iniziare */}
+              <div className="mt-8 text-center">
+                <button
+                  onClick={() => setActiveSection('architecture')}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+                >
+                  Inizia il Tutorial
+                  <Zap className="w-5 h-5" />
+                </button>
+              </div>
+            </section>
+          )}
+
+          {/* ARCHITECTURE */}
           {activeSection === 'architecture' && (
             <>
-              {/* Architecture Diagram */}
-              <section className="rounded-2xl border border-border bg-card p-6 fade-in stagger-2">
+              <section className="rounded-2xl border border-border bg-card p-4 sm:p-6 fade-in">
                 <ArchitectureDiagram 
                   activeStep={currentStep} 
                   isAnimating={isPlaying} 
                 />
               </section>
 
-              {/* Code Viewer */}
-              <section className="fade-in stagger-3">
+              <section className="fade-in">
                 <CodeViewer 
                   step={currentStep} 
                   isAnimating={isPlaying} 
                 />
               </section>
+
+              {/* Navigazione sezioni */}
+              <div className="flex justify-center gap-4 mt-8">
+                <button
+                  onClick={() => setActiveSection('security')}
+                  className="px-4 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
+                >
+                  Vai a: Sicurezza →
+                </button>
+              </div>
             </>
           )}
 
+          {/* SECURITY */}
           {activeSection === 'security' && (
-            <section className="fade-in">
-              <h3 className="text-xl font-bold mb-6 text-center">
-                Perché la API Key va nei Secrets?
-              </h3>
+            <section className="fade-in space-y-6">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold mb-2">
+                  🔐 Perché la Sicurezza è Importante?
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Se metti la API key nel codice frontend, chiunque può rubarla e usarla a tue spese.
+                  Ecco il confronto tra l'approccio sbagliato e quello corretto.
+                </p>
+              </div>
+
               <SecurityFlow isAnimating={isPlaying} />
               
-              {/* Additional explanation */}
-              <div className="mt-8 rounded-xl border border-border bg-card p-6">
-                <h4 className="font-semibold mb-4">📚 Riassunto Sicurezza</h4>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="p-4 rounded-lg bg-muted/30">
-                    <p className="font-medium text-primary mb-2">Frontend (Client)</p>
-                    <p className="text-sm text-muted-foreground">
-                      Tutto il codice qui è PUBBLICO. Chiunque può vederlo con DevTools.
-                    </p>
+              {/* Spiegazione extra per principianti */}
+              <div className="rounded-xl border border-border bg-card p-6">
+                <h4 className="font-semibold mb-4 flex items-center gap-2">
+                  <span className="text-xl">🧠</span> Capire la Differenza
+                </h4>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h5 className="font-medium text-destructive mb-2">Cosa succede se sbagli?</h5>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li className="flex items-start gap-2">
+                        <span>❌</span>
+                        <span>Chiunque può aprire DevTools e vedere la tua API key</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span>❌</span>
+                        <span>I bot automatici scansionano GitHub cercando chiavi esposte</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span>❌</span>
+                        <span>Potresti ricevere fatture enormi per uso non autorizzato</span>
+                      </li>
+                    </ul>
                   </div>
-                  <div className="p-4 rounded-lg bg-muted/30">
-                    <p className="font-medium text-secondary mb-2">Edge Function (Server)</p>
-                    <p className="text-sm text-muted-foreground">
-                      Codice PRIVATO che gira sui server. Solo qui puoi usare secrets.
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-muted/30">
-                    <p className="font-medium text-warning mb-2">Secrets (Vault)</p>
-                    <p className="text-sm text-muted-foreground">
-                      Variabili criptate accessibili solo dal backend. Mai nel codice!
-                    </p>
+                  <div>
+                    <h5 className="font-medium text-accent mb-2">Cosa succede se fai bene?</h5>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li className="flex items-start gap-2">
+                        <span>✅</span>
+                        <span>La chiave è criptata e accessibile solo dal backend</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span>✅</span>
+                        <span>Nessuno può rubarla guardando il codice</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span>✅</span>
+                        <span>Puoi revocarla e cambiarla senza modificare codice</span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
+              </div>
+
+              {/* Navigazione */}
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setActiveSection('architecture')}
+                  className="px-4 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
+                >
+                  ← Architettura
+                </button>
+                <button
+                  onClick={() => setActiveSection('flow')}
+                  className="px-4 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
+                >
+                  Flusso Dati →
+                </button>
               </div>
             </section>
           )}
 
+          {/* FLOW */}
           {activeSection === 'flow' && (
-            <section className="fade-in">
-              <h3 className="text-xl font-bold mb-6 text-center">
-                Flusso Completo: Richiesta e Risposta
-              </h3>
+            <section className="fade-in space-y-6">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold mb-2">
+                  🔄 Il Viaggio di un Messaggio
+                </h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Segui il percorso completo: da quando premi "Invia" a quando ricevi la risposta dell'AI.
+                </p>
+              </div>
               
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="rounded-xl border border-border bg-card p-6">
@@ -191,36 +263,75 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Timeline explanation */}
-              <div className="mt-8 rounded-xl border border-border bg-card p-6">
-                <h4 className="font-semibold mb-4">⏱️ Cosa succede in ogni passo</h4>
+              {/* Timeline con spiegazioni dettagliate */}
+              <div className="rounded-xl border border-border bg-card p-6">
+                <h4 className="font-semibold mb-4">📝 Spiegazione Passo per Passo</h4>
                 <div className="space-y-4">
                   {[
-                    { step: 1, title: 'Utente invia messaggio', desc: 'Il frontend raccoglie il messaggio e lo invia all\'Edge Function via HTTP POST.' },
-                    { step: 2, title: 'Edge Function elabora', desc: 'Valida la richiesta, recupera la API key dai secrets, prepara il payload.' },
-                    { step: 3, title: 'Accesso ai Secrets', desc: 'Deno.env.get() recupera la chiave criptata. Mai esposta al client!' },
-                    { step: 4, title: 'Chiamata all\'AI Gateway', desc: 'L\'Edge Function chiama l\'AI con la chiave segreta, riceve lo stream e lo inoltra.' },
-                  ].map(({ step, title, desc }) => (
+                    { 
+                      step: 1, 
+                      title: 'L\'utente scrive e invia', 
+                      desc: 'Il messaggio viene raccolto dal frontend React e preparato per l\'invio.',
+                      detail: 'Il frontend usa fetch() per inviare una richiesta HTTP POST al backend.'
+                    },
+                    { 
+                      step: 2, 
+                      title: 'L\'Edge Function riceve', 
+                      desc: 'Il backend riceve la richiesta e la valida.',
+                      detail: 'Controlla che la richiesta sia formattata correttamente e che l\'utente sia autorizzato.'
+                    },
+                    { 
+                      step: 3, 
+                      title: 'Recupero della API Key', 
+                      desc: 'Il backend legge la chiave segreta dalle variabili d\'ambiente.',
+                      detail: 'Deno.env.get("LOVABLE_API_KEY") restituisce la chiave senza esporla.'
+                    },
+                    { 
+                      step: 4, 
+                      title: 'Chiamata all\'AI e risposta', 
+                      desc: 'Il backend chiama l\'AI con la chiave e inoltra la risposta all\'utente.',
+                      detail: 'L\'AI elabora il messaggio e restituisce la risposta che viene mostrata nella chat.'
+                    },
+                  ].map(({ step, title, desc, detail }) => (
                     <div 
                       key={step}
                       className={`
-                        flex gap-4 p-3 rounded-lg transition-all
-                        ${currentStep >= step - 1 ? 'bg-primary/10' : 'opacity-40'}
+                        p-4 rounded-lg border transition-all
+                        ${currentStep >= step - 1 
+                          ? 'border-primary/50 bg-primary/5' 
+                          : 'border-border opacity-40'
+                        }
                       `}
                     >
-                      <div className={`
-                        w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold
-                        ${currentStep >= step - 1 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}
-                      `}>
-                        {step}
-                      </div>
-                      <div>
-                        <p className="font-medium">{title}</p>
-                        <p className="text-sm text-muted-foreground">{desc}</p>
+                      <div className="flex gap-4">
+                        <div className={`
+                          w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-bold text-lg
+                          ${currentStep >= step - 1 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}
+                        `}>
+                          {step}
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold">{title}</p>
+                          <p className="text-sm text-muted-foreground">{desc}</p>
+                          {currentStep >= step - 1 && (
+                            <p className="text-xs text-primary mt-2 p-2 bg-primary/10 rounded">
+                              💡 {detail}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Conclusione */}
+              <div className="rounded-xl border-2 border-accent bg-accent/5 p-6 text-center">
+                <h4 className="font-bold text-xl mb-2">🎉 Hai Capito!</h4>
+                <p className="text-muted-foreground max-w-xl mx-auto">
+                  Ora sai come un'applicazione web comunica in modo sicuro con un servizio AI.
+                  La chiave è sempre: <strong>mai esporre i secrets nel frontend</strong>!
+                </p>
               </div>
             </section>
           )}
@@ -232,6 +343,9 @@ const Index = () => {
         <div className="container mx-auto px-4 py-6 text-center">
           <p className="text-sm text-muted-foreground">
             🎓 Progetto educativo per imparare l'integrazione AI full-stack
+          </p>
+          <p className="text-xs text-muted-foreground/70 mt-1">
+            Creato con ❤️ per i futuri sviluppatori
           </p>
         </div>
       </footer>
