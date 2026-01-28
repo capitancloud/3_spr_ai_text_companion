@@ -288,23 +288,10 @@ const Index = () => {
           {/* AI DEMO */}
           {activeSection === 'ai-demo' && (
             <section className="fade-in space-y-6">
-              {/* Controller per AI Demo */}
-              <div className="flex justify-center">
-                <button
-                  onClick={() => setAiDemoPlaying(!aiDemoPlaying)}
-                  className={`
-                    flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all
-                    ${aiDemoPlaying 
-                      ? 'bg-destructive text-destructive-foreground' 
-                      : 'bg-primary text-primary-foreground'
-                    }
-                  `}
-                >
-                  {aiDemoPlaying ? '⏸️ Pausa Simulazione' : '▶️ Avvia Simulazione'}
-                </button>
-              </div>
-
-              <AIIntegrationDemo isAnimating={aiDemoPlaying} />
+              <AIIntegrationDemo 
+                isAnimating={aiDemoPlaying} 
+                onToggleAnimation={() => setAiDemoPlaying(!aiDemoPlaying)}
+              />
               
               {/* Navigazione */}
               <div className="flex justify-center gap-4">
