@@ -13,14 +13,9 @@ export default {
       },
     },
     extend: {
-      /*
-        FONT FAMILY
-        Utilizziamo JetBrains Mono per l'atmosfera "terminale/codice"
-        che si addice perfettamente a un'app AI
-      */
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        display: ['Space Grotesk', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -56,11 +51,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        /* Colori custom per gli effetti glow */
-        glow: {
-          cyan: "hsl(var(--glow-cyan))",
-          purple: "hsl(var(--glow-purple))",
-          green: "hsl(var(--glow-green))",
+        /* Colori custom per chat bubbles */
+        ai: {
+          bubble: "hsl(var(--ai-bubble))",
+          border: "hsl(var(--ai-border))",
+        },
+        user: {
+          bubble: "hsl(var(--user-bubble))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -87,28 +84,14 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        /* Animazione per l'ingresso dei messaggi */
-        "slide-up": {
-          from: { opacity: "0", transform: "translateY(20px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
-        /* Pulse per il bottone invio */
-        "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 5px hsl(var(--primary) / 0.5)" },
-          "50%": { boxShadow: "0 0 20px hsl(var(--primary) / 0.8)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "slide-up": "slide-up 0.4s ease-out",
-        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
       },
-      /* Ombre custom con effetto glow */
       boxShadow: {
-        "glow-sm": "0 0 10px hsl(var(--primary) / 0.3)",
-        "glow-md": "0 0 20px hsl(var(--primary) / 0.4)",
-        "glow-lg": "0 0 30px hsl(var(--primary) / 0.5)",
+        "soft": "0 2px 8px -2px rgba(0, 0, 0, 0.08)",
+        "soft-lg": "0 8px 24px -8px rgba(0, 0, 0, 0.12)",
       },
     },
   },

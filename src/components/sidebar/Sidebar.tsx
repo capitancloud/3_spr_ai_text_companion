@@ -1,21 +1,14 @@
 import { Conversation } from '@/types/chat';
 import { ConversationItem } from './ConversationItem';
 import { Button } from '@/components/ui/button';
-import { Plus, Bot, History } from 'lucide-react';
+import { Plus, GraduationCap, History, BookOpen } from 'lucide-react';
 
 /*
   ====================================
   COMPONENTE: Sidebar
   ====================================
   
-  Pannello laterale con:
-  - Bottone per nuova conversazione
-  - Lista delle conversazioni salvate
-  - Header con branding
-  
-  NOTA ARCHITETTURALE:
-  In un'app reale, le conversazioni verrebbero
-  caricate dal database con paginazione.
+  Design educativo con branding chiaro.
 */
 
 interface SidebarProps {
@@ -35,39 +28,49 @@ export const Sidebar = ({
 }: SidebarProps) => {
   return (
     <aside className="flex h-full w-72 flex-col border-r border-border bg-sidebar">
-      {/* Header con logo */}
-      <div className="flex items-center gap-3 border-b border-border p-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 glow-pulse">
-          <Bot className="h-6 w-6 text-primary" />
-        </div>
-        <div>
-          <h1 className="font-bold text-glow">AI Companion</h1>
-          <p className="text-xs text-muted-foreground">Progetto Educativo</p>
+      {/* Header con branding educativo */}
+      <div className="border-b border-border p-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+            <GraduationCap className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h1 className="font-semibold text-foreground">AI Companion</h1>
+            <p className="text-xs text-muted-foreground">Impara l'integrazione AI</p>
+          </div>
         </div>
       </div>
 
-      {/* Bottone nuova conversazione */}
-      <div className="p-4">
+      {/* Bottone nuova chat */}
+      <div className="p-3">
         <Button 
           onClick={onNewConversation}
-          className="w-full gap-2"
+          className="w-full justify-start gap-2"
           variant="outline"
         >
           <Plus className="h-4 w-4" />
-          Nuova Chat
+          Nuova conversazione
         </Button>
       </div>
 
+      {/* Sezione storico */}
+      <div className="px-3 py-2">
+        <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+          <History className="h-3.5 w-3.5" />
+          STORICO CHAT
+        </div>
+      </div>
+
       {/* Lista conversazioni */}
-      <div className="flex-1 overflow-y-auto p-2">
+      <div className="flex-1 overflow-y-auto px-2">
         {conversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
-            <History className="mb-2 h-8 w-8 text-muted-foreground/50" />
+            <BookOpen className="mb-2 h-8 w-8 text-muted-foreground/40" />
             <p className="text-sm text-muted-foreground">
-              Nessuna conversazione
+              Nessuna chat salvata
             </p>
             <p className="text-xs text-muted-foreground/70">
-              Inizia una nuova chat!
+              Inizia una conversazione!
             </p>
           </div>
         ) : (
@@ -85,12 +88,12 @@ export const Sidebar = ({
         )}
       </div>
 
-      {/* Footer educativo */}
-      <div className="border-t border-border p-4">
-        <div className="rounded-lg bg-muted/30 p-3">
-          <p className="text-xs text-muted-foreground">
-            💡 <strong>Nota:</strong> Questa app simula le risposte AI. 
-            In produzione, userebbe API come OpenAI o Anthropic.
+      {/* Footer informativo */}
+      <div className="border-t border-border p-3">
+        <div className="rounded-lg bg-accent/10 p-3">
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            💡 <strong>Suggerimento:</strong> Guarda il codice per capire come 
+            vengono costruite le richieste API.
           </p>
         </div>
       </div>

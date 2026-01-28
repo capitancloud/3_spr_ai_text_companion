@@ -7,73 +7,105 @@
   AI TEXT COMPANION - DESIGN SYSTEM
   ====================================
   
-  Questo file definisce il sistema di design dell'app.
-  Utilizziamo HSL per i colori perché permette facili modifiche
-  di luminosità e saturazione mantenendo la stessa tonalità.
-  
-  TEMA: Cyberpunk/Futuristico con accenti neon
+  TEMA: Piattaforma educativa - pulito, accogliente, professionale
+  Ispirazione: Notion, Khan Academy, Duolingo
 */
 
 @layer base {
   :root {
-    /* Sfondo scuro profondo per l'atmosfera tech */
-    --background: 220 20% 4%;
-    --foreground: 180 100% 95%;
+    /* Sfondo caldo e accogliente */
+    --background: 40 30% 98%;
+    --foreground: 220 20% 20%;
 
-    /* Card con trasparenza per effetto glass */
-    --card: 220 25% 8%;
-    --card-foreground: 180 100% 95%;
+    /* Card con sfondo bianco puro */
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 20%;
 
-    --popover: 220 25% 8%;
-    --popover-foreground: 180 100% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 20%;
 
-    /* Primary: Cyan neon - colore principale dell'AI */
-    --primary: 180 100% 50%;
-    --primary-foreground: 220 20% 4%;
+    /* Primary: Indaco - colore della conoscenza e fiducia */
+    --primary: 238 65% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: Viola elettrico per accenti */
-    --secondary: 280 100% 60%;
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary: Viola tenue per accenti */
+    --secondary: 250 40% 96%;
+    --secondary-foreground: 238 65% 50%;
 
-    /* Muted: Per testi secondari */
-    --muted: 220 15% 15%;
-    --muted-foreground: 220 10% 55%;
+    /* Muted: Grigio caldo per testi secondari */
+    --muted: 220 15% 95%;
+    --muted-foreground: 220 10% 45%;
 
-    /* Accent: Verde neon per successo/AI attiva */
-    --accent: 160 100% 45%;
-    --accent-foreground: 220 20% 4%;
+    /* Accent: Verde educativo per successo/AI */
+    --accent: 152 60% 52%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 12%;
-    --ring: 180 100% 50%;
+    --border: 220 15% 90%;
+    --input: 220 15% 92%;
+    --ring: 238 65% 60%;
 
     --radius: 0.75rem;
 
-    /* Colori custom per effetti speciali */
-    --glow-cyan: 180 100% 50%;
-    --glow-purple: 280 100% 60%;
-    --glow-green: 160 100% 45%;
-    
-    /* Gradienti */
-    --gradient-primary: linear-gradient(135deg, hsl(180 100% 50%), hsl(200 100% 60%));
-    --gradient-secondary: linear-gradient(135deg, hsl(280 100% 60%), hsl(320 100% 50%));
-    --gradient-card: linear-gradient(180deg, hsl(220 25% 10%), hsl(220 25% 6%));
-    
-    /* Ombre con glow */
-    --shadow-glow-cyan: 0 0 20px hsl(180 100% 50% / 0.3), 0 0 40px hsl(180 100% 50% / 0.1);
-    --shadow-glow-purple: 0 0 20px hsl(280 100% 60% / 0.3), 0 0 40px hsl(280 100% 60% / 0.1);
+    /* Sidebar - leggermente più scura */
+    --sidebar-background: 220 20% 97%;
+    --sidebar-foreground: 220 20% 25%;
+    --sidebar-primary: 238 65% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 250 40% 94%;
+    --sidebar-accent-foreground: 238 65% 50%;
+    --sidebar-border: 220 15% 90%;
+    --sidebar-ring: 238 65% 60%;
 
-    --sidebar-background: 220 25% 6%;
-    --sidebar-foreground: 180 100% 95%;
-    --sidebar-primary: 180 100% 50%;
-    --sidebar-primary-foreground: 220 20% 4%;
-    --sidebar-accent: 220 20% 12%;
-    --sidebar-accent-foreground: 180 100% 95%;
-    --sidebar-border: 220 20% 15%;
-    --sidebar-ring: 180 100% 50%;
+    /* Colori custom per l'AI */
+    --ai-bubble: 152 45% 96%;
+    --ai-border: 152 40% 85%;
+    --user-bubble: 238 65% 60%;
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 220 15% 95%;
+
+    --card: 220 20% 13%;
+    --card-foreground: 220 15% 95%;
+
+    --popover: 220 20% 13%;
+    --popover-foreground: 220 15% 95%;
+
+    --primary: 238 70% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 238 70% 70%;
+
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 60%;
+
+    --accent: 152 55% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 18%;
+    --ring: 238 70% 65%;
+
+    --sidebar-background: 220 20% 8%;
+    --sidebar-foreground: 220 15% 90%;
+    --sidebar-primary: 238 70% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 20% 15%;
+    --sidebar-accent-foreground: 238 70% 70%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: 238 70% 65%;
+
+    --ai-bubble: 220 20% 15%;
+    --ai-border: 220 15% 25%;
+    --user-bubble: 238 70% 55%;
   }
 }
 
@@ -83,39 +115,52 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
   }
 }
 
 /* 
   ====================================
-  ANIMAZIONI PERSONALIZZATE
+  ANIMAZIONI SEMPLICI E PROFESSIONALI
   ====================================
-  Queste animazioni creano l'effetto "AI che pensa"
-  e rendono l'interfaccia più viva e coinvolgente.
 */
 
 @layer utilities {
-  /* Effetto glow pulsante - simula l'AI "attiva" */
-  .glow-pulse {
-    animation: glow-pulse 2s ease-in-out infinite;
+  /* Animazione fade-in delicata per i messaggi */
+  .message-enter {
+    animation: message-enter 0.3s ease-out forwards;
   }
 
-  @keyframes glow-pulse {
-    0%, 100% {
-      box-shadow: 0 0 5px hsl(var(--primary) / 0.5),
-                  0 0 10px hsl(var(--primary) / 0.3),
-                  0 0 20px hsl(var(--primary) / 0.1);
+  @keyframes message-enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
     }
-    50% {
-      box-shadow: 0 0 10px hsl(var(--primary) / 0.8),
-                  0 0 20px hsl(var(--primary) / 0.5),
-                  0 0 40px hsl(var(--primary) / 0.3);
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
-  /* Animazione typing cursor */
+  /* Shimmer per loading - più sottile */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Typing cursor */
   .typing-cursor {
     animation: blink 1s step-end infinite;
   }
@@ -125,126 +170,35 @@
     51%, 100% { opacity: 0; }
   }
 
-  /* Effetto scan line - stile terminale retro */
-  .scanlines::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      hsl(180 100% 50% / 0.03) 2px,
-      hsl(180 100% 50% / 0.03) 4px
-    );
-    pointer-events: none;
-  }
-
-  /* Animazione fade-in per i messaggi */
-  .message-enter {
-    animation: message-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  @keyframes message-enter {
-    from {
-      opacity: 0;
-      transform: translateY(20px) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  /* Effetto shimmer per loading */
-  .shimmer {
-    background: linear-gradient(
-      90deg,
-      hsl(var(--muted)) 0%,
-      hsl(var(--primary) / 0.1) 50%,
-      hsl(var(--muted)) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  /* Particelle fluttuanti */
-  .floating-particle {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0) translateX(0); }
-    25% { transform: translateY(-10px) translateX(5px); }
-    50% { transform: translateY(-5px) translateX(-5px); }
-    75% { transform: translateY(-15px) translateX(3px); }
-  }
-
-  /* Bordo gradiente animato */
-  .gradient-border {
-    position: relative;
-    background: hsl(var(--card));
-    border-radius: var(--radius);
-  }
-
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(
-      45deg,
-      hsl(var(--primary)),
-      hsl(var(--secondary)),
-      hsl(var(--accent)),
-      hsl(var(--primary))
-    );
-    border-radius: calc(var(--radius) + 2px);
-    z-index: -1;
-    background-size: 300% 300%;
-    animation: gradient-rotate 4s linear infinite;
-  }
-
-  @keyframes gradient-rotate {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  /* Effetto glass morphism */
-  .glass {
-    background: hsl(var(--card) / 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid hsl(var(--border) / 0.5);
-  }
-
-  /* Text glow */
-  .text-glow {
-    text-shadow: 0 0 10px hsl(var(--primary) / 0.5),
-                 0 0 20px hsl(var(--primary) / 0.3);
-  }
-
-  /* AI thinking dots */
+  /* Thinking dots animation */
   .thinking-dots span {
-    animation: thinking 1.4s infinite ease-in-out both;
+    animation: bounce 1.4s infinite ease-in-out both;
   }
 
   .thinking-dots span:nth-child(1) { animation-delay: 0s; }
-  .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+  .thinking-dots span:nth-child(2) { animation-delay: 0.16s; }
+  .thinking-dots span:nth-child(3) { animation-delay: 0.32s; }
 
-  @keyframes thinking {
+  @keyframes bounce {
     0%, 80%, 100% {
-      transform: scale(0.6);
-      opacity: 0.5;
+      transform: translateY(0);
     }
     40% {
-      transform: scale(1);
-      opacity: 1;
+      transform: translateY(-6px);
     }
+  }
+
+  /* Hover scale delicato */
+  .hover-lift {
+    @apply transition-all duration-200;
+  }
+
+  .hover-lift:hover {
+    @apply -translate-y-0.5 shadow-md;
+  }
+
+  /* Focus ring accessibile */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
   }
 }

@@ -5,41 +5,33 @@ import { Bot } from 'lucide-react';
   COMPONENTE: ThinkingIndicator
   ====================================
   
-  Mostra un'animazione mentre l'AI "sta pensando".
-  Questo feedback visivo è cruciale per l'UX:
-  l'utente sa che la sua richiesta è in elaborazione.
-  
-  In un'app reale, questo apparirebbe mentre
-  aspetti la risposta dall'API.
+  Indica che l'AI sta elaborando la risposta.
+  Design pulito con animazione di puntini.
 */
 
 export const ThinkingIndicator = () => {
   return (
-    <div className="message-enter flex gap-3 p-4">
-      {/* Avatar AI con glow animato */}
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary/20 text-secondary glow-pulse">
-        <Bot className="h-5 w-5" />
+    <div className="message-enter flex gap-3 py-3">
+      {/* Avatar AI */}
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
+        <Bot className="h-4 w-4" />
       </div>
 
-      {/* Bolla con animazione "thinking" */}
-      <div className="glass rounded-2xl rounded-bl-sm px-6 py-4">
-        <div className="flex items-center gap-2">
-          {/* Testo "sta pensando" */}
-          <span className="text-sm text-muted-foreground">
-            L'AI sta elaborando
-          </span>
+      {/* Contenuto */}
+      <div>
+        <p className="mb-1 text-xs font-medium text-muted-foreground">
+          AI Companion
+        </p>
+        
+        <div className="inline-flex items-center gap-2 rounded-2xl rounded-bl-md bg-ai-bubble border border-ai-border px-4 py-3">
+          <span className="text-sm text-muted-foreground">Sto pensando</span>
           
-          {/* Tre puntini animati */}
+          {/* Puntini animati */}
           <div className="thinking-dots flex gap-1">
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            <span className="h-2 w-2 rounded-full bg-primary" />
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           </div>
-        </div>
-
-        {/* Barra di "elaborazione" simulata */}
-        <div className="mt-3 h-1 w-32 overflow-hidden rounded-full bg-muted">
-          <div className="shimmer h-full w-full" />
         </div>
       </div>
     </div>
