@@ -122,38 +122,163 @@ export const SecurityFlow = ({ isAnimating }: SecurityFlowProps) => {
           </div>
 
           <div className="space-y-4">
-            {/* Codice con spiegazione */}
-            <div className="rounded-lg bg-muted/50 p-4 font-mono text-sm">
+            {/* Codice con evidenziazione animata della chiave */}
+            <div className="rounded-lg bg-muted/50 p-4 font-mono text-sm relative overflow-hidden">
               <p className="text-muted-foreground mb-2">// ⚠️ Questo codice è visibile a TUTTI</p>
               <p className="text-muted-foreground">// Nel file React/JavaScript</p>
-              <p>const API_KEY = <span className="text-destructive font-bold">"sk-secret123..."</span></p>
+              <div className="relative">
+                <p>const API_KEY = <span className={`
+                  font-bold transition-all duration-500
+                  ${attackStep >= 3 ? 'text-destructive animate-pulse bg-destructive/30 px-1 rounded' : 'text-destructive'}
+                `}>"sk-secret123..."</span></p>
+                {/* Indicatore visivo del furto */}
+                {attackStep >= 3 && (
+                  <div className="absolute -right-2 top-0 animate-bounce">
+                    <span className="text-lg">👀</span>
+                  </div>
+                )}
+              </div>
               <p className="mt-2 text-muted-foreground">// Poi lo uso per chiamare l'AI</p>
               <p>fetch(url, {'{'} headers: {'{'} Authorization: API_KEY {'}'} {'}'})</p>
+              
+              {/* Effetto scanning */}
+              {attackStep >= 2 && attackStep < 3 && (
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-destructive/20 to-transparent animate-scan pointer-events-none" />
+              )}
             </div>
 
-            {/* Visualizzazione dell'attacco */}
-            <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/30">
-              <p className="text-sm font-semibold text-destructive mb-3">🎬 Cosa succede quando sbagli:</p>
+            {/* Visualizzazione dell'attacco MIGLIORATA */}
+            <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/30 relative overflow-hidden">
+              <p className="text-sm font-semibold text-destructive mb-4">🎬 Simulazione Attacco in Tempo Reale:</p>
               
-              <div className="space-y-2">
-                <div className={`flex items-center gap-3 p-2 rounded transition-all ${attackStep >= 1 ? 'bg-destructive/20' : ''}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${attackStep >= 1 ? 'bg-destructive text-destructive-foreground' : 'bg-muted text-muted-foreground'}`}>1</div>
-                  <User className={`w-4 h-4 ${attackStep >= 1 ? 'text-destructive' : 'text-muted-foreground'}`} />
-                  <span className="text-sm">Un hacker visita il tuo sito</span>
+              {/* Timeline visiva */}
+              <div className="relative">
+                {/* Linea di connessione verticale */}
+                <div className="absolute left-[19px] top-4 bottom-4 w-0.5 bg-muted-foreground/20">
+                  <div 
+                    className="w-full bg-destructive transition-all duration-500 ease-out"
+                    style={{ height: `${Math.min(attackStep * 33.33, 100)}%` }}
+                  />
                 </div>
                 
-                <div className={`flex items-center gap-3 p-2 rounded transition-all ${attackStep >= 2 ? 'bg-destructive/20' : ''}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${attackStep >= 2 ? 'bg-destructive text-destructive-foreground' : 'bg-muted text-muted-foreground'}`}>2</div>
-                  <Search className={`w-4 h-4 ${attackStep >= 2 ? 'text-destructive' : 'text-muted-foreground'}`} />
-                  <span className="text-sm">Apre DevTools → Network</span>
-                </div>
-                
-                <div className={`flex items-center gap-3 p-2 rounded transition-all ${attackStep >= 3 ? 'bg-destructive/20' : ''}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${attackStep >= 3 ? 'bg-destructive text-destructive-foreground' : 'bg-muted text-muted-foreground'}`}>3</div>
-                  <Eye className={`w-4 h-4 ${attackStep >= 3 ? 'text-destructive' : 'text-muted-foreground'}`} />
-                  <span className="text-sm">Vede la tua API Key in chiaro!</span>
+                <div className="space-y-4 relative">
+                  {/* Step 1 */}
+                  <div className={`
+                    flex items-center gap-4 p-3 rounded-lg transition-all duration-500
+                    ${attackStep >= 1 ? 'bg-destructive/20 scale-[1.02]' : 'bg-muted/20'}
+                  `}>
+                    <div className={`
+                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0
+                      transition-all duration-500 relative
+                      ${attackStep >= 1 ? 'bg-destructive text-destructive-foreground shadow-lg shadow-destructive/50' : 'bg-muted text-muted-foreground'}
+                    `}>
+                      {attackStep >= 1 ? (
+                        <User className="w-5 h-5 animate-pulse" />
+                      ) : (
+                        <span>1</span>
+                      )}
+                      {attackStep === 1 && (
+                        <span className="absolute -inset-1 rounded-full border-2 border-destructive animate-ping" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`text-sm font-medium ${attackStep >= 1 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                        Un hacker visita il tuo sito
+                      </p>
+                      {attackStep >= 1 && (
+                        <p className="text-xs text-muted-foreground animate-fade-in">
+                          Si comporta come un utente normale...
+                        </p>
+                      )}
+                    </div>
+                    {attackStep >= 1 && (
+                      <span className="text-xl animate-bounce">🥷</span>
+                    )}
+                  </div>
+                  
+                  {/* Step 2 */}
+                  <div className={`
+                    flex items-center gap-4 p-3 rounded-lg transition-all duration-500
+                    ${attackStep >= 2 ? 'bg-destructive/20 scale-[1.02]' : 'bg-muted/20'}
+                  `}>
+                    <div className={`
+                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0
+                      transition-all duration-500 relative
+                      ${attackStep >= 2 ? 'bg-destructive text-destructive-foreground shadow-lg shadow-destructive/50' : 'bg-muted text-muted-foreground'}
+                    `}>
+                      {attackStep >= 2 ? (
+                        <Search className="w-5 h-5 animate-pulse" />
+                      ) : (
+                        <span>2</span>
+                      )}
+                      {attackStep === 2 && (
+                        <span className="absolute -inset-1 rounded-full border-2 border-destructive animate-ping" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`text-sm font-medium ${attackStep >= 2 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                        Preme F12 → Apre DevTools → Network
+                      </p>
+                      {attackStep >= 2 && (
+                        <p className="text-xs text-muted-foreground animate-fade-in">
+                          Inizia a cercare tra le richieste...
+                        </p>
+                      )}
+                    </div>
+                    {attackStep >= 2 && (
+                      <kbd className="px-2 py-1 rounded bg-muted text-xs font-mono animate-pulse">F12</kbd>
+                    )}
+                  </div>
+                  
+                  {/* Step 3 - TROVATO! */}
+                  <div className={`
+                    flex items-center gap-4 p-3 rounded-lg transition-all duration-500
+                    ${attackStep >= 3 ? 'bg-destructive/30 scale-[1.02] border border-destructive animate-pulse' : 'bg-muted/20'}
+                  `}>
+                    <div className={`
+                      w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0
+                      transition-all duration-500 relative
+                      ${attackStep >= 3 ? 'bg-destructive text-destructive-foreground shadow-lg shadow-destructive/50' : 'bg-muted text-muted-foreground'}
+                    `}>
+                      {attackStep >= 3 ? (
+                        <Eye className="w-5 h-5" />
+                      ) : (
+                        <span>3</span>
+                      )}
+                      {attackStep === 3 && (
+                        <>
+                          <span className="absolute -inset-1 rounded-full border-2 border-destructive animate-ping" />
+                          <span className="absolute -inset-2 rounded-full border border-destructive/50 animate-ping" style={{ animationDelay: '0.2s' }} />
+                        </>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`text-sm font-medium ${attackStep >= 3 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                        🚨 TROVATO! Vede la tua API Key!
+                      </p>
+                      {attackStep >= 3 && (
+                        <div className="mt-1 p-2 rounded bg-background/50 border border-destructive animate-fade-in">
+                          <code className="text-xs text-destructive font-mono">
+                            Authorization: "sk-secret123..."
+                          </code>
+                        </div>
+                      )}
+                    </div>
+                    {attackStep >= 3 && (
+                      <span className="text-2xl">💀</span>
+                    )}
+                  </div>
                 </div>
               </div>
+              
+              {/* Alert finale */}
+              {attackStep >= 3 && (
+                <div className="mt-4 p-3 rounded-lg bg-destructive/40 border border-destructive text-center animate-fade-in">
+                  <p className="text-sm font-bold text-destructive-foreground">
+                    ⚠️ GAME OVER - La tua chiave è stata rubata!
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Conseguenze */}
