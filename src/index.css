@@ -7,105 +7,65 @@
   AI TEXT COMPANION - DESIGN SYSTEM
   ====================================
   
-  TEMA: Piattaforma educativa - pulito, accogliente, professionale
-  Ispirazione: Notion, Khan Academy, Duolingo
+  TEMA: Scuro elegante per piattaforma educativa tecnica
+  Focus: Visualizzazione architettura e flussi dati
 */
 
 @layer base {
   :root {
-    /* Sfondo caldo e accogliente */
-    --background: 40 30% 98%;
-    --foreground: 220 20% 20%;
+    --background: 222 47% 6%;
+    --foreground: 210 40% 96%;
 
-    /* Card con sfondo bianco puro */
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 20%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 20%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 96%;
 
-    /* Primary: Indaco - colore della conoscenza e fiducia */
-    --primary: 238 65% 60%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary: Blu brillante per azioni e focus */
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 6%;
 
-    /* Secondary: Viola tenue per accenti */
-    --secondary: 250 40% 96%;
-    --secondary-foreground: 238 65% 50%;
+    /* Secondary: Viola per accenti */
+    --secondary: 262 83% 65%;
+    --secondary-foreground: 0 0% 100%;
 
-    /* Muted: Grigio caldo per testi secondari */
-    --muted: 220 15% 95%;
-    --muted-foreground: 220 10% 45%;
+    /* Muted: Per sfondi secondari */
+    --muted: 222 30% 12%;
+    --muted-foreground: 215 20% 55%;
 
-    /* Accent: Verde educativo per successo/AI */
-    --accent: 152 60% 52%;
+    /* Accent: Verde per successo/conferme */
+    --accent: 142 71% 45%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 55%;
+    /* Warning: Arancione per attenzione */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 0%;
+
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 90%;
-    --input: 220 15% 92%;
-    --ring: 238 65% 60%;
+    --border: 222 30% 18%;
+    --input: 222 30% 15%;
+    --ring: 217 91% 60%;
 
     --radius: 0.75rem;
 
-    /* Sidebar - leggermente più scura */
-    --sidebar-background: 220 20% 97%;
-    --sidebar-foreground: 220 20% 25%;
-    --sidebar-primary: 238 65% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 250 40% 94%;
-    --sidebar-accent-foreground: 238 65% 50%;
-    --sidebar-border: 220 15% 90%;
-    --sidebar-ring: 238 65% 60%;
+    /* Colori per i componenti architetturali */
+    --frontend: 217 91% 60%;
+    --edge-function: 262 83% 65%;
+    --database: 142 71% 45%;
+    --api-gateway: 38 92% 50%;
+    --secrets: 0 84% 60%;
 
-    /* Colori custom per l'AI */
-    --ai-bubble: 152 45% 96%;
-    --ai-border: 152 40% 85%;
-    --user-bubble: 238 65% 60%;
-  }
-
-  .dark {
-    --background: 220 20% 10%;
-    --foreground: 220 15% 95%;
-
-    --card: 220 20% 13%;
-    --card-foreground: 220 15% 95%;
-
-    --popover: 220 20% 13%;
-    --popover-foreground: 220 15% 95%;
-
-    --primary: 238 70% 65%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 20% 18%;
-    --secondary-foreground: 238 70% 70%;
-
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 60%;
-
-    --accent: 152 55% 45%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 65% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 15% 20%;
-    --input: 220 15% 18%;
-    --ring: 238 70% 65%;
-
-    --sidebar-background: 220 20% 8%;
-    --sidebar-foreground: 220 15% 90%;
-    --sidebar-primary: 238 70% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 20% 15%;
-    --sidebar-accent-foreground: 238 70% 70%;
-    --sidebar-border: 220 15% 18%;
-    --sidebar-ring: 238 70% 65%;
-
-    --ai-bubble: 220 20% 15%;
-    --ai-border: 220 15% 25%;
-    --user-bubble: 238 70% 55%;
+    --sidebar-background: 222 47% 5%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 30% 12%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 222 30% 15%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -122,20 +82,66 @@
 
 /* 
   ====================================
-  ANIMAZIONI SEMPLICI E PROFESSIONALI
+  ANIMAZIONI PER FLUSSO DATI
   ====================================
 */
 
 @layer utilities {
-  /* Animazione fade-in delicata per i messaggi */
-  .message-enter {
-    animation: message-enter 0.3s ease-out forwards;
+  /* Animazione pulse per componenti attivi */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
   }
 
-  @keyframes message-enter {
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 5px currentColor,
+                  0 0 10px currentColor;
+      opacity: 1;
+    }
+    50% {
+      box-shadow: 0 0 15px currentColor,
+                  0 0 30px currentColor;
+      opacity: 0.8;
+    }
+  }
+
+  /* Animazione per il flusso dei dati (linea che scorre) */
+  .data-flow {
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      currentColor 50%, 
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: data-flow 2s linear infinite;
+  }
+
+  @keyframes data-flow {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Animazione per pacchetti di dati */
+  .packet-move {
+    animation: packet-move 2s ease-in-out infinite;
+  }
+
+  @keyframes packet-move {
+    0% { transform: translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateX(100%); opacity: 0; }
+  }
+
+  /* Fade in per sezioni */
+  .fade-in {
+    animation: fade-in 0.5s ease-out forwards;
+  }
+
+  @keyframes fade-in {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -143,62 +149,89 @@
     }
   }
 
-  /* Shimmer per loading - più sottile */
-  .shimmer {
-    background: linear-gradient(
-      90deg,
-      hsl(var(--muted)) 0%,
-      hsl(var(--muted-foreground) / 0.1) 50%,
-      hsl(var(--muted)) 100%
+  /* Stagger per elementi in lista */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+
+  /* Highlight per codice */
+  .code-highlight {
+    background: linear-gradient(90deg,
+      transparent 0%,
+      hsl(var(--primary) / 0.2) 50%,
+      transparent 100%
     );
     background-size: 200% 100%;
-    animation: shimmer 1.5s ease-in-out infinite;
+    animation: code-highlight 3s ease-in-out infinite;
   }
 
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+  @keyframes code-highlight {
+    0%, 100% { background-position: 200% 0; }
+    50% { background-position: -200% 0; }
   }
 
-  /* Typing cursor */
-  .typing-cursor {
-    animation: blink 1s step-end infinite;
+  /* Connessione animata tra componenti */
+  .connection-line {
+    stroke-dasharray: 8 4;
+    animation: dash-flow 1s linear infinite;
+  }
+
+  @keyframes dash-flow {
+    to { stroke-dashoffset: -12; }
+  }
+
+  /* Typing animation per codice */
+  .typing {
+    overflow: hidden;
+    border-right: 2px solid hsl(var(--primary));
+    white-space: nowrap;
+    animation: typing 3s steps(40) forwards, blink 0.75s step-end infinite;
+  }
+
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
   }
 
   @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+    50% { border-color: transparent; }
   }
 
-  /* Thinking dots animation */
-  .thinking-dots span {
-    animation: bounce 1.4s infinite ease-in-out both;
+  /* Gradient border animato */
+  .gradient-border {
+    position: relative;
+    background: hsl(var(--card));
+    border-radius: var(--radius);
   }
 
-  .thinking-dots span:nth-child(1) { animation-delay: 0s; }
-  .thinking-dots span:nth-child(2) { animation-delay: 0.16s; }
-  .thinking-dots span:nth-child(3) { animation-delay: 0.32s; }
-
-  @keyframes bounce {
-    0%, 80%, 100% {
-      transform: translateY(0);
-    }
-    40% {
-      transform: translateY(-6px);
-    }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--frontend)),
+      hsl(var(--edge-function)),
+      hsl(var(--api-gateway)),
+      hsl(var(--frontend))
+    );
+    border-radius: calc(var(--radius) + 1px);
+    z-index: -1;
+    background-size: 300% 100%;
+    animation: gradient-move 4s linear infinite;
   }
 
-  /* Hover scale delicato */
-  .hover-lift {
-    @apply transition-all duration-200;
+  @keyframes gradient-move {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
   }
 
-  .hover-lift:hover {
-    @apply -translate-y-0.5 shadow-md;
-  }
-
-  /* Focus ring accessibile */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  /* Glass effect */
+  .glass {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid hsl(var(--border) / 0.5);
   }
 }
