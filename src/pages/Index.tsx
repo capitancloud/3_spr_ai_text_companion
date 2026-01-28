@@ -19,31 +19,64 @@ import { AIIntegrationDemo } from '@/components/education/AIIntegrationDemo';
 */
 
 const Index = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // Stati separati per ogni sezione
   const [activeSection, setActiveSection] = useState<'intro' | 'architecture' | 'security' | 'ai-demo' | 'flow'>('intro');
-  const totalSteps = 4;
+  
+  // Architettura
+  const [archStep, setArchStep] = useState(0);
+  const [archPlaying, setArchPlaying] = useState(false);
+  const archTotalSteps = 4;
+  
+  // Security
+  const [securityPlaying, setSecurityPlaying] = useState(false);
+  
+  // AI Demo
+  const [aiDemoPlaying, setAiDemoPlaying] = useState(false);
+  
+  // Flow
+  const [flowStep, setFlowStep] = useState(0);
+  const [flowPlaying, setFlowPlaying] = useState(false);
+  const flowTotalSteps = 4;
 
+  // Reset quando si cambia sezione
   useEffect(() => {
-    if (!isPlaying) return;
+    setArchStep(0);
+    setArchPlaying(false);
+    setSecurityPlaying(false);
+    setAiDemoPlaying(false);
+    setFlowStep(0);
+    setFlowPlaying(false);
+  }, [activeSection]);
 
+  // Animazione Architettura
+  useEffect(() => {
+    if (!archPlaying) return;
     const interval = setInterval(() => {
-      setCurrentStep(prev => {
-        if (prev >= totalSteps - 1) {
-          setIsPlaying(false);
+      setArchStep(prev => {
+        if (prev >= archTotalSteps - 1) {
+          setArchPlaying(false);
           return prev;
         }
         return prev + 1;
       });
     }, 3000);
-
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [archPlaying]);
 
-  const handleReset = () => {
-    setCurrentStep(0);
-    setIsPlaying(false);
-  };
+  // Animazione Flow
+  useEffect(() => {
+    if (!flowPlaying) return;
+    const interval = setInterval(() => {
+      setFlowStep(prev => {
+        if (prev >= flowTotalSteps - 1) {
+          setFlowPlaying(false);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [flowPlaying]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -99,20 +132,6 @@ const Index = () => {
           </div>
         )}
 
-        {/* Controller (non in intro) */}
-        {activeSection !== 'intro' && (
-          <div className="mb-8 fade-in">
-            <FlowController
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-              isPlaying={isPlaying}
-              onStepChange={setCurrentStep}
-              onPlayPause={() => setIsPlaying(!isPlaying)}
-              onReset={handleReset}
-            />
-          </div>
-        )}
-
         {/* Content */}
         <div className="space-y-8">
           {/* INTRO */}
@@ -136,17 +155,29 @@ const Index = () => {
           {/* ARCHITECTURE */}
           {activeSection === 'architecture' && (
             <>
+              {/* Controller per Architettura */}
+              <div className="mb-8 fade-in">
+                <FlowController
+                  currentStep={archStep}
+                  totalSteps={archTotalSteps}
+                  isPlaying={archPlaying}
+                  onStepChange={setArchStep}
+                  onPlayPause={() => setArchPlaying(!archPlaying)}
+                  onReset={() => { setArchStep(0); setArchPlaying(false); }}
+                />
+              </div>
+
               <section className="rounded-2xl border border-border bg-card p-4 sm:p-6 fade-in">
                 <ArchitectureDiagram 
-                  activeStep={currentStep} 
-                  isAnimating={isPlaying} 
+                  activeStep={archStep} 
+                  isAnimating={archPlaying} 
                 />
               </section>
 
-              <section className="fade-in">
+              <section className="fade-in mt-6">
                 <CodeViewer 
-                  step={currentStep} 
-                  isAnimating={isPlaying} 
+                  step={archStep} 
+                  isAnimating={archPlaying} 
                 />
               </section>
 
@@ -165,6 +196,22 @@ const Index = () => {
           {/* SECURITY */}
           {activeSection === 'security' && (
             <section className="fade-in space-y-6">
+              {/* Controller semplice per Security */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setSecurityPlaying(!securityPlaying)}
+                  className={`
+                    flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all
+                    ${securityPlaying 
+                      ? 'bg-destructive text-destructive-foreground' 
+                      : 'bg-primary text-primary-foreground'
+                    }
+                  `}
+                >
+                  {securityPlaying ? '⏸️ Pausa Animazione' : '▶️ Avvia Animazione'}
+                </button>
+              </div>
+
               <div className="text-center">
                 <h2 className="text-2xl font-bold mb-2">
                   🔐 Perché la Sicurezza è Importante?
@@ -175,7 +222,7 @@ const Index = () => {
                 </p>
               </div>
 
-              <SecurityFlow isAnimating={isPlaying} />
+              <SecurityFlow isAnimating={securityPlaying} />
               
               {/* Spiegazione extra per principianti */}
               <div className="rounded-xl border border-border bg-card p-6">
@@ -241,7 +288,23 @@ const Index = () => {
           {/* AI DEMO */}
           {activeSection === 'ai-demo' && (
             <section className="fade-in space-y-6">
-              <AIIntegrationDemo isAnimating={isPlaying} />
+              {/* Controller per AI Demo */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setAiDemoPlaying(!aiDemoPlaying)}
+                  className={`
+                    flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all
+                    ${aiDemoPlaying 
+                      ? 'bg-destructive text-destructive-foreground' 
+                      : 'bg-primary text-primary-foreground'
+                    }
+                  `}
+                >
+                  {aiDemoPlaying ? '⏸️ Pausa Simulazione' : '▶️ Avvia Simulazione'}
+                </button>
+              </div>
+
+              <AIIntegrationDemo isAnimating={aiDemoPlaying} />
               
               {/* Navigazione */}
               <div className="flex justify-center gap-4">
@@ -264,6 +327,18 @@ const Index = () => {
           {/* FLOW */}
           {activeSection === 'flow' && (
             <section className="fade-in space-y-6">
+              {/* Controller per Flow */}
+              <div className="mb-8 fade-in">
+                <FlowController
+                  currentStep={flowStep}
+                  totalSteps={flowTotalSteps}
+                  isPlaying={flowPlaying}
+                  onStepChange={setFlowStep}
+                  onPlayPause={() => setFlowPlaying(!flowPlaying)}
+                  onReset={() => { setFlowStep(0); setFlowPlaying(false); }}
+                />
+              </div>
+
               <div className="text-center">
                 <h2 className="text-2xl font-bold mb-2">
                   🔄 Il Viaggio di un Messaggio
@@ -276,13 +351,13 @@ const Index = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="rounded-xl border border-border bg-card p-6">
                   <DataFlowVisualization 
-                    activeStep={currentStep} 
+                    activeStep={flowStep} 
                     direction="request" 
                   />
                 </div>
                 <div className="rounded-xl border border-border bg-card p-6">
                   <DataFlowVisualization 
-                    activeStep={currentStep} 
+                    activeStep={flowStep} 
                     direction="response" 
                   />
                 </div>
@@ -322,7 +397,7 @@ const Index = () => {
                       key={step}
                       className={`
                         p-4 rounded-lg border transition-all
-                        ${currentStep >= step - 1 
+                        ${flowStep >= step - 1 
                           ? 'border-primary/50 bg-primary/5' 
                           : 'border-border opacity-40'
                         }
@@ -331,14 +406,14 @@ const Index = () => {
                       <div className="flex gap-4">
                         <div className={`
                           w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-bold text-lg
-                          ${currentStep >= step - 1 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}
+                          ${flowStep >= step - 1 ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}
                         `}>
                           {step}
                         </div>
                         <div className="flex-1">
                           <p className="font-semibold">{title}</p>
                           <p className="text-sm text-muted-foreground">{desc}</p>
-                          {currentStep >= step - 1 && (
+                          {flowStep >= step - 1 && (
                             <p className="text-xs text-primary mt-2 p-2 bg-primary/10 rounded">
                               💡 {detail}
                             </p>
