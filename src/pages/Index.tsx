@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GraduationCap, BookOpen, Code2, Zap, HelpCircle } from 'lucide-react';
+import { GraduationCap, BookOpen, Code2, Zap, HelpCircle, Brain } from 'lucide-react';
 import { ArchitectureDiagram } from '@/components/architecture/ArchitectureDiagram';
 import { CodeViewer } from '@/components/architecture/CodeViewer';
 import { SecurityFlow } from '@/components/architecture/SecurityFlow';
@@ -7,6 +7,7 @@ import { FlowController } from '@/components/architecture/FlowController';
 import { DataFlowVisualization } from '@/components/architecture/DataFlowVisualization';
 import { BeginnerIntro } from '@/components/education/BeginnerIntro';
 import { Glossary } from '@/components/education/Glossary';
+import { AIIntegrationDemo } from '@/components/education/AIIntegrationDemo';
 
 /*
   ====================================
@@ -20,7 +21,7 @@ import { Glossary } from '@/components/education/Glossary';
 const Index = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [activeSection, setActiveSection] = useState<'intro' | 'architecture' | 'security' | 'flow'>('intro');
+  const [activeSection, setActiveSection] = useState<'intro' | 'architecture' | 'security' | 'ai-demo' | 'flow'>('intro');
   const totalSteps = 4;
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const Index = () => {
                 { id: 'intro', label: 'Introduzione', icon: HelpCircle },
                 { id: 'architecture', label: 'Architettura', icon: Code2 },
                 { id: 'security', label: 'Sicurezza', icon: BookOpen },
+                { id: 'ai-demo', label: 'Demo AI', icon: Brain },
                 { id: 'flow', label: 'Flusso', icon: Zap },
               ].map(({ id, label, icon: Icon }) => (
                 <button
@@ -225,6 +227,29 @@ const Index = () => {
                   className="px-4 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
                 >
                   ← Architettura
+                </button>
+                <button
+                  onClick={() => setActiveSection('ai-demo')}
+                  className="px-4 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
+                >
+                  Demo AI →
+                </button>
+              </div>
+            </section>
+          )}
+
+          {/* AI DEMO */}
+          {activeSection === 'ai-demo' && (
+            <section className="fade-in space-y-6">
+              <AIIntegrationDemo isAnimating={isPlaying} />
+              
+              {/* Navigazione */}
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setActiveSection('security')}
+                  className="px-4 py-2 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-all"
+                >
+                  ← Sicurezza
                 </button>
                 <button
                   onClick={() => setActiveSection('flow')}
