@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button';
   COMPONENTE: ConversationItem
   ====================================
   
-  Singola voce nella lista delle conversazioni.
-  Mostra titolo, data e permette selezione/eliminazione.
+  Design pulito per le voci della sidebar.
 */
 
 interface ConversationItemProps {
@@ -25,15 +24,14 @@ export const ConversationItem = ({
   onSelect,
   onDelete,
 }: ConversationItemProps) => {
-  // Formatta la data in modo leggibile
   const formatDate = (date: Date) => {
     const now = new Date();
     const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
     
     if (diffDays === 0) return 'Oggi';
     if (diffDays === 1) return 'Ieri';
-    if (diffDays < 7) return `${diffDays} giorni fa`;
-    return date.toLocaleDateString('it-IT');
+    if (diffDays < 7) return `${diffDays}g fa`;
+    return date.toLocaleDateString('it-IT', { day: 'numeric', month: 'short' });
   };
 
   return (
@@ -41,40 +39,32 @@ export const ConversationItem = ({
       className={cn(
         'group relative flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-all',
         isActive
-          ? 'bg-primary/20 border border-primary/50'
-          : 'hover:bg-muted/50 border border-transparent'
+          ? 'bg-primary/10 text-primary'
+          : 'hover:bg-muted text-foreground'
       )}
       onClick={onSelect}
     >
-      {/* Icona */}
-      <MessageSquare
-        className={cn(
-          'h-5 w-5 shrink-0',
-          isActive ? 'text-primary' : 'text-muted-foreground'
-        )}
-      />
+      <MessageSquare className="h-4 w-4 shrink-0" />
 
-      {/* Info conversazione */}
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">
           {conversation.title}
         </p>
         <p className="text-xs text-muted-foreground">
-          {formatDate(conversation.updatedAt)} • {conversation.messages.length} messaggi
+          {formatDate(conversation.updatedAt)} • {conversation.messages.length} msg
         </p>
       </div>
 
-      {/* Bottone elimina (visibile solo al hover) */}
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+        className="h-7 w-7 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
         onClick={(e) => {
           e.stopPropagation();
           onDelete();
         }}
       >
-        <Trash2 className="h-4 w-4 text-destructive" />
+        <Trash2 className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
       </Button>
     </div>
   );
