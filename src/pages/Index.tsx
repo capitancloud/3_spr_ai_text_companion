@@ -8,6 +8,9 @@ import { DataFlowVisualization } from '@/components/architecture/DataFlowVisuali
 import { BeginnerIntro } from '@/components/education/BeginnerIntro';
 import { Glossary } from '@/components/education/Glossary';
 import { AIIntegrationDemo } from '@/components/education/AIIntegrationDemo';
+import { useAuth } from '@/hooks/useAuth';
+import { LoginPage } from '@/components/auth/LoginPage';
+import { LogoutButton } from '@/components/auth/LogoutButton';
 
 /*
   ====================================
@@ -19,6 +22,8 @@ import { AIIntegrationDemo } from '@/components/education/AIIntegrationDemo';
 */
 
 const Index = () => {
+  const { isAuthenticated, isLoading, login, logout } = useAuth();
+  
   // Stati separati per ogni sezione
   const [activeSection, setActiveSection] = useState<'intro' | 'architecture' | 'security' | 'ai-demo' | 'flow'>('intro');
   
@@ -78,6 +83,25 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [flowPlaying]);
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <GraduationCap className="w-8 h-8 text-white" />
+          </div>
+          <p className="text-muted-foreground">Caricamento...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Login page
+  if (!isAuthenticated) {
+    return <LoginPage onLogin={login} />;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -94,8 +118,9 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Navigation */}
-            <nav className="flex items-center gap-1 bg-muted/50 rounded-lg p-1 overflow-x-auto">
+            {/* Navigation + Logout */}
+            <div className="flex items-center gap-2">
+              <nav className="flex items-center gap-1 bg-muted/50 rounded-lg p-1 overflow-x-auto">
               {[
                 { id: 'intro', label: 'Introduzione', icon: HelpCircle },
                 { id: 'architecture', label: 'Architettura', icon: Code2 },
@@ -118,7 +143,9 @@ const Index = () => {
                   <span className="hidden sm:inline">{label}</span>
                 </button>
               ))}
-            </nav>
+              </nav>
+              <LogoutButton onLogout={logout} />
+            </div>
           </div>
         </div>
       </header>
