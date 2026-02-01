@@ -110,16 +110,6 @@ export function LoginPage({ onLogin }: LoginPageProps) {
             </Button>
           </form>
 
-          {/* Info Box */}
-          <div className="mt-6 p-4 rounded-xl bg-muted/50 border border-border">
-            <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
-              <span>🔐</span> Sicurezza
-            </h4>
-            <p className="text-xs text-muted-foreground">
-              Il codice viene verificato tramite hash SHA-256. 
-              Nessuna password viene memorizzata in chiaro.
-            </p>
-          </div>
         </div>
 
         {/* Footer */}
