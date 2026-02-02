@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { GraduationCap, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
+import { Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import superProgrammatoreLogo from '@/assets/super-programmatore-logo.png';
 
 interface LoginPageProps {
   onLogin: (code: string) => Promise<{ success: boolean; error?: string }>;
@@ -30,11 +31,13 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
+        {/* Header with Logo */}
         <div className="text-center mb-8">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <GraduationCap className="w-10 h-10 text-white" />
-          </div>
+          <img 
+            src={superProgrammatoreLogo} 
+            alt="Super Programmatore Logo" 
+            className="w-48 h-auto mx-auto mb-6"
+          />
           <h1 className="text-3xl font-bold mb-2">AI Text Companion</h1>
           <p className="text-muted-foreground">
             Guida Interattiva all'Integrazione AI
